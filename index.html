@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  </head>
+  <body>
+    <!--<button type="button" class="btnPredict buttons" onclick="init()">출석체크하기</button>-->
+    <a class="btnPredict button" href="javascript:init();">출석체크하기</a>
+    <div id="webcam-container"></div>
+    <div id="label-container" class="cam"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script type="text/javascript">
+      const URL = "https://teachablemachine.withgoogle.com/models/MrCNuGNq-/";
+
+      let model, webcam, labelContainer, maxPredictions;
+      async function init() {
+        $(function () {
+          $("#webcam-container").empty();
+        });
+
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        const flip = true;
+        webcam = new tmImage.Webcam(200, 200, flip);
+        await webcam.setup();
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) {
+          labelContainer.appendChild(document.createElement("div"));
+        }
+
+        try {
+          model = await tmImage.load(modelURL, metadataURL);
+          maxPredictions = model.getTotalClasses();
+          labelContainer = document.getElementById("label-container");
+          for (let i = 0; i < maxPredictions; i++) {
+            labelContainer.appendChild(document.createElement("div"));
+          }
+          predict();
+        } catch (error) {
+          console.error("Error loading model:", error);
+          alert("Please Press The Start Button Again");
+        }
+      }
+
+      async function loop() {
+        webcam.update();
+        await predict();
+        window.requestAnimationFrame(loop);
+      }
+
+      async function predict() {
+        const prediction = await model.predict(webcam.canvas);
+
+        let highestProbability = 0;
+        let highestCharacter = "";
+
+        for (let i = 0; i < maxPredictions; i++) {
+          const className = prediction[i].className;
+          const probability = prediction[i].probability;
+
+          const classPrediction =
+            className + ": " + probability.toFixed(2) * 100 + "%";
+          labelContainer.childNodes[i].innerHTML = classPrediction;
+
+          if (probability > highestProbability) {
+            highestProbability = probability;
+            highestCharacter = className;
+          }
+        }
+
+        const highestPredictionText =
+          highestCharacter + " " + highestProbability.toFixed(2) * 100 + "%";
+        labelContainer.innerHTML = highestCharacter;
+
+        document.getElementById("pname").innerHTML = highestCharacter;
+        document.getElementById("prate").innerHTML =
+          highestProbability.toFixed(2) * 100 + "%";
+      }
+    </script>
+  </body>
+</html>
