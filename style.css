@@ -3,12 +3,11 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  max-height: 1080px;
   display: flex;
+  max-height: 1080px;
   justify-content: center;
   align-items: center;
   font-family: sans-serif;
-  text-size-adjust: 200px;
 }
 
 .button {
@@ -31,9 +30,7 @@ body {
 
 .btnPredict {
   text-decoration: none;
-  position: absolute;
-  top: 30%;
-  left: calc(50%-50px);
+  justify-content: center;
   border-radius: 200px;
   width: 10%;
   text-align: center;
@@ -51,4 +48,5 @@ body {
 canvas {
     top: 70%;
     margin-top: 50px;
+    border-radius: 25px;
 }
