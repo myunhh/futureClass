@@ -6,13 +6,18 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
   </head>
+
+  <div class="mTitle">출석체크 프로그램</div>
+
   <body>
     <!--<button type="button" class="btnPredict buttons" onclick="init()">출석체크하기</button>-->
-    <div id="webcam-container"></div>
-    <div id="label-container" class="cam"></div>
-    <a class="btnPredict button" href="javascript:init();">출석체크하기</a>
+
+    <div id="webcam-container" class="cam"></div>
+    <div>
+      <a class="button" href="javascript:init();">출석체크하기</a>
+    </div>
     <br />
-    <div class="under_text">출석체크</div>
+    <div id="label-container" class="mds"></div>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
     <script type="text/javascript">
@@ -83,12 +88,11 @@
         }
 
         const highestPredictionText =
-          highestCharacter + " " + highestProbability.toFixed(2) * 100 + "%";
+        highestCharacter + " " + highestProbability.toFixed(2) * 100 + "%";
         labelContainer.innerHTML = highestCharacter;
 
         document.getElementById("pname").innerHTML = highestCharacter;
-        document.getElementById("prate").innerHTML =
-          highestProbability.toFixed(2) * 100 + "%";
+        document.getElementById("prate").innerHTML = highestProbability.toFixed(2) * 100 + "%";
       }
     </script>
   </body>
