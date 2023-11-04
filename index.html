@@ -40,11 +40,24 @@
         await webcam.setup();
         await webcam.play();
         window.requestAnimationFrame(loop);
-
+        
+        result = ""
         document.getElementById("webcam-container").appendChild(webcam.canvas);
         labelContainer = document.getElementById("label-container");
+        if(labelContainer == "MDS"){
+          result = "마동석님 출석체크 되었습니다."
+        }
+        else if(labelContainer == "COS"){
+          result = "최우식님 출석체크 되었습니다."
+        }
+        else if(labelContainer == "AYJ"){
+          result = "안유진님 출석체크 되었습니다."
+        }
+        else if(labelContainer == "KAR"){
+          result = "카리나님 출석체크 되었습니다."
+        }
         for (let i = 0; i < maxPredictions; i++) {
-          labelContainer.appendChild(document.createElement("div"));
+          result.appendChild(document.createElement("div"));
         }
 
         try {
